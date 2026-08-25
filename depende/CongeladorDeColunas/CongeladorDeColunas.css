@@ -1,0 +1,55 @@
+.freezer-colunas {
+  table {
+    --largura-coluna-zero: 0px;
+    --largura-coluna-um: 110px;
+    --largura-coluna-dois: 110px;
+  }
+
+  table:is(.congelar-uma-coluna, .congelar-duas-coluna, .congelar-tres-coluna) :where(td, th):nth-child(1) {
+    position: sticky !important;
+    left: 0;
+    z-index: 1019;
+  }
+
+  table:is(.congelar-duas-coluna, .congelar-tres-coluna) :where(td, th):nth-child(2) {
+    position: sticky !important;
+    left: calc(var(--largura-coluna-zero) + var(--largura-coluna-um));
+    z-index: 1019;
+  }
+
+  table.congelar-tres-coluna :where(td, th):nth-child(3) {
+    position: sticky !important;
+    left: calc(var(--largura-coluna-zero) + var(--largura-coluna-um) + var(--largura-coluna-dois));
+    z-index: 1019;
+  }
+
+  table.congelar-uma-coluna :where(td, th):nth-child(1)::after,
+  table.congelar-duas-coluna :where(td, th):nth-child(2)::after,
+  table.congelar-tres-coluna :where(td, th):nth-child(3)::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    content: "";
+    pointer-events: none;
+    right: 0;
+    transform: translateX(100%);
+    box-shadow: inset 10px 0 8px -8px var(--bs-table-border-color);
+    opacity: 1;
+
+    /* animation: revelar-sombra steps(1, end) both;
+    animation-timeline: scroll(inline nearest);
+    animation-range: 0px 1px; */
+  }
+
+}
+
+@keyframes revelar-sombra {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

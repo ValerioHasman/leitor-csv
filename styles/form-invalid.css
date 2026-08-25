@@ -1,0 +1,18 @@
+form :invalid {
+  border-color: var(--bs-form-invalid-border-color);
+}
+
+form :invalid:focus {
+  border-color: var(--bs-form-invalid-border-color);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25);
+}
+
+label:has(:where(input, select, textarea):required) :where(div, span):not(:has(>*))::after {
+  content: " *";
+  color: rgba(var(--bs-danger-rgb));
+}
+
+*:has(>:where(input, select, textarea):required) :where(label)::after {
+  content: " *";
+  color: rgba(var(--bs-danger-rgb));
+}

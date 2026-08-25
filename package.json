@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "datatables.net-bs5": "^2.3.4",
+    "datatables.net-colreorder-bs5": "^2.1.2",
+    "datatables.net-columncontrol-bs5": "^1.1.0",
+    "datatables.net-datetime": "^1.6.0",
+    "datatables.net-searchbuilder-bs5": "^1.8.4",
+    "papaparse": "^5.6.0"
+  }
+}

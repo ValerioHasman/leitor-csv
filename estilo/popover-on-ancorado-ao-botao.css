@@ -1,0 +1,43 @@
+[popover]:where(:not(:popover-open)) {
+  display: none !important;
+}
+
+.popover-on {
+
+  transition-property: opacity, transform, display, scale;
+  transition-duration: 0s;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition-behavior: allow-discrete;
+  inset: unset;
+
+  opacity: 0;
+  scale: 0.8;
+
+  &:popover-open {
+    opacity: 1;
+    scale: 1;
+
+    @starting-style {
+      opacity: 0;
+      scale: 0.8;
+    }
+  }
+}
+
+.ancorado-ao-botao {
+  min-width: min-content;
+  max-height: -webkit-fill-available;
+  max-height: stretch;
+  max-width: stretch;
+  max-width: -webkit-fill-available;
+  max-width: -moz-available;
+  position: fixed;
+  position-try-order: most-height;
+  position-area: bottom;
+  position-try-fallbacks:
+    span-left bottom,
+    span-right bottom,
+    top,
+    span-right top,
+    span-left top;
+}

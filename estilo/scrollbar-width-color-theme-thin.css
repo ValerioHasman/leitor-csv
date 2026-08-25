@@ -1,0 +1,13 @@
+:root,
+[data-bs-theme=light] {
+  --scroll-bar-color: #63636380;
+}
+
+[data-bs-theme=dark] {
+  --scroll-bar-color: #D1D1D180;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar-color) transparent;
+}
