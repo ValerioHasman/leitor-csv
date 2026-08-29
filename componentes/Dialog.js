@@ -1,4 +1,4 @@
-import Elemento from "../depende/Elemento.js";
+import Elemento from "Elemento";
 
 export default class Dialog {
   static simples(...filhos) {

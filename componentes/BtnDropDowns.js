@@ -1,7 +1,7 @@
 
 /** @typedef {import("Elemento").Elementar} Elementar */
 
-import Elemento from "../depende/Elemento.js";
+import Elemento from "Elemento";
 
 /** 
  * @param {Elementar} botaoAtivador 

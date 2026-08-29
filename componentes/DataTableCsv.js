@@ -9,9 +9,11 @@ import "datatables.net-colreorder";
 import "datatables.net-colreorder-bs5";
 DataTable.ext.errMode = 'throw';
 import TabelaRedimencionavel from "../depende/TabelaRedimencionavel/TabelaRedimencionavel.js";
-import Elemento from "../depende/Elemento.js";
+import Elemento from "Elemento";
 import { aplicarAncoraPopOver } from "../componentes/PopOver.js";
 import { CongeladorDeColunas } from "../depende/CongeladorDeColunas/CongeladorDeColunas.js";
+import { botaoCSV } from "./LerCsv.js";
+import { main } from "../scripts/main.js";
 
 DataTable.ColumnControl.content.buscaEntidade = {
   defaults: { placeholder: '' },
@@ -138,9 +140,9 @@ DataTable.ColumnControl.content.ocultarColuna = {
 
 
 /**
- * @param {HTMLElement} el 
- * @param {string} clss 
- * @param {string} nclss 
+ * @param {HTMLElement} el
+ * @param {string} clss
+ * @param {string} nclss
  */
 function replaceClass(el, clss, ...nclss) {
   for (const ch of el.querySelectorAll(`.${clss}`)) {
@@ -152,7 +154,7 @@ function replaceClass(el, clss, ...nclss) {
 
 function renderEntidade(data, type, row) {
   if (type === 'display') {
-    return Elemento.span({ className: "line-clamp-1-box word-break-all" },
+    return Elemento.span({ className: "controle-celula" },
       data
     );
   }
@@ -179,12 +181,10 @@ export function DataTableCsv(dados) {
 
   const colunas = Object.keys(dados.data[0]);
 
-  console.log(colunas)
-
   const tabelaNode = Elemento.table(
-    { className: "table align-middle text-break table-sm table-bordered" },
+    { className: "table align-middle table-sm" },
     Elemento.thead(
-      { className: "sticky-top" },
+      { className: "sticky-top small" },
       Elemento.tr(
         {},
         ...colunas.map(
@@ -236,10 +236,28 @@ export function DataTableCsv(dados) {
         replaceClass(container, "d-md-flex", "d-flex");
         replaceClass(container, "col-md-auto", "col-auto");
         replaceClass(container, "row", "d-flex", "flex-wrap", "gap-2");
+        replaceClass(container, "mt-2");
+
+        for (const div of container.querySelectorAll("&>*:not(:has(table)):not(:last-child)")) {
+          div.classList.add("p-1");
+        }
 
         container.querySelector("&>div").append(
           Elemento.div(
             { className: "justify-content-between align-items-center col-auto d-flex gap-1" },
+            Elemento.div(
+              { className: "form-check form-switch" },
+              Elemento.input({ className: "form-check-input line-clamp-1-box", type: "checkbox", checked: true })
+            ),
+            botaoCSV(
+              (dados) => {
+                congelador.destroy();
+                tabelaDataTable.destroy();
+                main.replaceChildren(
+                  DataTableCsv(dados).table().container()
+                );
+              }
+            ),
             aplicarAncoraPopOver(
               Elemento.button(
                 { className: "btn btn-primary btn-sm" },
@@ -484,11 +502,6 @@ export function DataTableCsv(dados) {
     }
   );
 
-  window.addEventListener(
-    "resize",
-    () => { congelador.recalcular(); }
-  )
-
   tabelaDataTable.on(
     'draw',
     () => { congelador.recalcular(); }
@@ -501,7 +514,7 @@ export function DataTableCsv(dados) {
 
   tabelaRedmenci.addEventListener(
     "arrastando",
-    () => { requestAnimationFrame(() => { congelador.recalcular(); }) }
+    () => { congelador.recalcular(); }
   );
 
   tabelaDataTable.on(

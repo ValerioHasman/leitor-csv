@@ -1,4 +1,4 @@
-import Elemento from "../depende/Elemento.js";
+import Elemento from "Elemento";
 
 export function botaoComAncoraPopOver(conteudoBtn, conteudo) {
   return (

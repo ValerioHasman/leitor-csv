@@ -1,9 +1,10 @@
-import { aplicarAncoraPopOver } from "../../componentes/BtnDropDowns.js";
-import Elemento from "../Elemento.js";
+import { aplicarAncoraPopOver } from "../../componentes/PopOver.js";
+import Elemento from "Elemento";
 
 export class CongeladorDeColunas {
   /** @type {HTMLTableElement} */ #aTabela;
   #ignorarPrimeiraColuna = false;
+  #recalcularFunc;
 
   /**
    * @param {HTMLButtonElement} botao
@@ -66,10 +67,18 @@ export class CongeladorDeColunas {
         )
       )
     );
+
+    this.#recalcularFunc = () => { this.recalcular(); };
+
+    window.addEventListener("resize", this.#recalcularFunc);
   }
 
   get aTabela() {
     return this.#aTabela;
+  }
+
+  destroy() {
+    window.removeEventListener("resize", this.#recalcularFunc);
   }
 
   descongelar() {
@@ -83,9 +92,7 @@ export class CongeladorDeColunas {
     this.recalcular();
   }
 
-
-  recalcular() {
-
+  recalcularAgora() {
     const [th0, th1, th2] = Array.from(this.#aTabela.querySelectorAll("th"));
 
     let larguraZero = th0?.clientWidth || 0;
@@ -97,10 +104,16 @@ export class CongeladorDeColunas {
       this.#aTabela.style.setProperty("--largura-coluna-um", `${larguraUm}px`);
       this.#aTabela.style.setProperty("--largura-coluna-dois", `${larguraDois}px`);
     } else {
-      console.log(`${larguraZero}\t${larguraUm}\t${larguraDois}`)
       this.#aTabela.style.setProperty("--largura-coluna-zero", `0px`);
       this.#aTabela.style.setProperty("--largura-coluna-um", `${larguraZero}px`);
       this.#aTabela.style.setProperty("--largura-coluna-dois", `${larguraUm}px`);
+    }
+  }
+
+  async recalcular() {
+    for (let t = 0; t < 10; t = t + 3) {
+      await new Promise(r => setTimeout(r, t));
+      requestAnimationFrame(() => { this.recalcularAgora() });
     }
   }
 

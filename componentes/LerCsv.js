@@ -1,5 +1,5 @@
 import papaparse from "papaparse";
-import Elemento, { execute } from "../depende/Elemento.js";
+import Elemento, { execute } from "Elemento";
 import Dialog from "./Dialog.js";
 import { unirLabelInput } from "./unirInputLabel.js";
 
@@ -9,7 +9,7 @@ export function inputFile() {
   input.className = "form-control form-control-sm";
   input.type = "file";
   input.required = true;
-  input.accept = "text/csv";
+  input.accept = ".csv";
   return input;
 }
 
@@ -26,6 +26,7 @@ export function botaoCSV(funcao) {
             {
               onsubmit: (ev) => {
                 ev.preventDefault();
+                modal.close();
                 const form = ev.target;
                 const separador = form.querySelector('[name="separador"]');
                 const csvContent = form.querySelector('[name="csvContent"]');
@@ -41,9 +42,9 @@ export function botaoCSV(funcao) {
                     delimiter: separador.value,
                     quoteChar: '"',
                     escapeChar: '"',
+                    skipEmptyLines: true
                   });
                   funcao(dados);
-                  modal.close();
                 };
                 reader.readAsText(file);
               }
@@ -57,7 +58,8 @@ export function botaoCSV(funcao) {
               Elemento.button(
                 {
                   className: "ms-auto btn btn-sm btn-outline-danger border-0",
-                  onclick: () => modal.close()
+                  type: "button",
+                  onclick: () => { modal.close(); }
                 },
                 Elemento.i({ className: "bi bi-x-lg" })
               )
@@ -99,7 +101,7 @@ export function botaoCSV(funcao) {
                 )
               ),
               Elemento.div(
-                { className: "col-12" },
+                { className: "col-12 small" },
                 Elemento.pre({ className: "bg-body-tertiary p-3 rounded-1", style: { maxHeight: "300px" } }, pre)
               )
             ),
