@@ -6,7 +6,7 @@ export const main = Elemento.main({ className: "flex-grow-1 overflow-hidden d-fl
 
 document.body.append(
   Elemento.div(
-    { className: "estilo-tabela-associacao freezer-colunas container-fluid d-flex flex-column vh-100 dvh-100" },
+    { className: "estilo-tabela-associacao d-flex flex-column vh-100 dvh-100" },
     execute(
       Elemento.div({ className: "py-1" }),
       (div) => {
