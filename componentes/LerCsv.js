@@ -57,11 +57,10 @@ export function botaoCSV(funcao) {
               ),
               Elemento.button(
                 {
-                  className: "ms-auto btn btn-sm btn-outline-danger border-0",
+                  className: "ms-auto btn-close",
                   type: "button",
                   onclick: () => { modal.close(); }
-                },
-                Elemento.i({ className: "bi bi-x-lg" })
+                }
               )
             ),
             Elemento.div(
