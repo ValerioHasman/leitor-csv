@@ -154,7 +154,7 @@ function replaceClass(el, clss, ...nclss) {
 
 function renderEntidade(data, type, row) {
   if (type === 'display') {
-    return Elemento.span({ className: "controle-celula" },
+    return Elemento.span({ className: "controle-celula small" },
       data
     );
   }
@@ -319,7 +319,7 @@ export function DataTableCsv(dados) {
 
       },
       data: dados.data,
-      lengthMenu: [10, 25, 200, -1],
+      lengthMenu: [25, 50, 200, -1],
       searchBuilder: {
         columns: "[data-name]",
         conditions: {
@@ -507,7 +507,7 @@ export function DataTableCsv(dados) {
         indicators: false
       },
       responsive: true,
-      pageLength: 25
+      pageLength: 50
     }
   );
 
