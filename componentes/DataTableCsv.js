@@ -233,14 +233,23 @@ export function DataTableCsv(dados) {
       },
       initComplete: function (settings) {
         const container = this.api().table().container();
-        replaceClass(container, "d-md-flex", "d-flex");
+
+        /** @type {HTMLDivElement[]} */
+        const [painel1, painel2, painel3] = container.querySelectorAll("&>*");
+
+        painel1.style.setProperty("--bs-gutter-x", 0);
+        painel2.style.setProperty("--bs-gutter-x", 0);
+        painel3.style.setProperty("--bs-gutter-x", 0);
+
+        painel1.classList.add("gap-1", "p-1");
+
+        replaceClass(painel1, "d-md-flex", "d-flex", "flex-wrap");
+        replaceClass(painel1, "row", "d-flex", "flex-wrap", "gap-2");
         replaceClass(container, "col-md-auto", "col-auto");
-        replaceClass(container, "row", "d-flex", "flex-wrap", "gap-2");
         replaceClass(container, "mt-2");
 
-        for (const div of container.querySelectorAll("&>*:not(:has(table)):not(:last-child)")) {
-          div.classList.add("p-1");
-        }
+        this.api().on("draw", () => { container.querySelector(".pagination").classList.add("pagination-sm"); });
+        this.api().one("column-sizing", () => { container.querySelector(".pagination").classList.add("pagination-sm"); });
 
         container.querySelector("&>div").append(
           Elemento.div(
