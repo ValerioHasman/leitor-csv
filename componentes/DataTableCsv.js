@@ -14,6 +14,7 @@ import { aplicarAncoraPopOver } from "../componentes/PopOver.js";
 import { CongeladorDeColunas } from "../depende/CongeladorDeColunas/CongeladorDeColunas.js";
 import { botaoCSV } from "./LerCsv.js";
 import { main } from "../scripts/main.js";
+import Tooltip from "./Tooltip.js";
 
 DataTable.ColumnControl.content.buscaEntidade = {
   defaults: { placeholder: '' },
@@ -154,9 +155,12 @@ function replaceClass(el, clss, ...nclss) {
 
 function renderEntidade(data, type, row) {
   if (type === 'display') {
-    return Elemento.span({ className: "controle-celula small" },
-      data
+    const spanF = Elemento.span({}, data)
+    const span = Elemento.span({ className: "controle-celula small" },
+      spanF
     );
+    if (data) Tooltip(spanF, data);
+    return span;
   }
   return data || "";
 }
