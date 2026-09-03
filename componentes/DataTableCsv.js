@@ -13,7 +13,7 @@ import Elemento from "Elemento";
 import { aplicarAncoraPopOver } from "../componentes/PopOver.js";
 import { CongeladorDeColunas } from "../depende/CongeladorDeColunas/CongeladorDeColunas.js";
 import { botaoCSV } from "./LerCsv.js";
-import { main } from "../scripts/main.js";
+import { main, spinner } from "../scripts/main.js";
 import Tooltip from "./Tooltip.js";
 
 DataTable.ColumnControl.content.buscaEntidade = {
@@ -186,7 +186,7 @@ export function DataTableCsv(dados) {
   const colunas = Object.keys(dados.data[0]);
 
   const tabelaNode = Elemento.table(
-    { className: "table align-middle table-sm" },
+    { className: "table align-middle table-sm table-hover" },
     Elemento.thead(
       { className: "sticky-top small" },
       Elemento.tr(
@@ -201,7 +201,14 @@ export function DataTableCsv(dados) {
                   data: coluna
                 },
               },
-              Elemento.span({ className: "line-clamp-2-box small" }, coluna)
+              (() => {
+                const spanF = Elemento.span({}, coluna)
+                const span = Elemento.span({ className: "line-clamp-2-box small" },
+                  spanF
+                );
+                if (coluna) Tooltip(spanF, coluna);
+                return span;
+              })()
             )
           )
         )
@@ -236,7 +243,9 @@ export function DataTableCsv(dados) {
         headerRows: [0],
       },
       initComplete: function (settings) {
-        const container = this.api().table().container();
+        const thisApi = this.api();
+
+        const container = thisApi.table().container();
 
         /** @type {HTMLDivElement[]} */
         const [painel1, painel2, painel3] = container.querySelectorAll("&>*");
@@ -252,8 +261,13 @@ export function DataTableCsv(dados) {
         replaceClass(container, "col-md-auto", "col-auto");
         replaceClass(container, "mt-2");
 
-        this.api().on("draw", () => { container.querySelector(".pagination").classList.add("pagination-sm"); });
-        this.api().one("column-sizing", () => { container.querySelector(".pagination").classList.add("pagination-sm"); });
+        function paginationClassListAdd(s) {
+          container.querySelector(".pagination").classList.add("pagination-sm");
+        }
+
+        thisApi.on("column-sizing", paginationClassListAdd);
+        thisApi.on("init", paginationClassListAdd);
+        thisApi.on("draw", paginationClassListAdd);
 
         container.querySelector("&>div").append(
           Elemento.div(
@@ -263,9 +277,13 @@ export function DataTableCsv(dados) {
               Elemento.input({ className: "form-check-input line-clamp-1-box", type: "checkbox", checked: true })
             ),
             botaoCSV(
-              (dados) => {
+              async (dados) => {
                 congelador.destroy();
                 tabelaDataTable.destroy();
+                main.replaceChildren(spinner());
+
+                await new Promise(r => setTimeout(r));
+
                 main.replaceChildren(
                   DataTableCsv(dados).table().container()
                 );

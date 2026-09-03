@@ -8,16 +8,19 @@ document.body.append(
   Elemento.div(
     { className: "estilo-tabela-associacao d-flex flex-column vh-100 dvh-100" },
     execute(
-      Elemento.div({ className: "py-1" }),
+      Elemento.div({ className: "p-5" }),
       (div) => {
         div.append(
           botaoCSV(
-            (dados) => {
+            async (dados) => {
+              div.remove();
               main.replaceChildren(spinner());
+
+              await new Promise(r => setTimeout(r));
+
               main.replaceChildren(
                 DataTableCsv(dados).table().container()
-              );
-              div.remove();
+              )
             }
           )
         )
@@ -27,7 +30,7 @@ document.body.append(
   )
 );
 
-function spinner() {
+export function spinner() {
   return Elemento.div(
     { className: "m-auto" },
     Elemento.div(

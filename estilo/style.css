@@ -169,4 +169,5 @@ thead>tr:last-child td {
   text-align: left;
   white-space: break-spaces;
   --bs-tooltip-max-width: 512;
+  --bs-tooltip-padding-y: 0.5rem;
 }

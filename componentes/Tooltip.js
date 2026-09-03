@@ -10,6 +10,7 @@ export default function Tooltip(elemento, conteudo, opcoes = {}) {
     {
       title: conteudo,
       html: conteudo instanceof HTMLElement,
+      popperConfig: { strategy: 'fixed' },
       delay: { show: 150, hide: 0 },
       ...opcoes,
     }
