@@ -1,0 +1,33 @@
+.balao-hover-out-origem {
+  transition-property: opacity;
+  transition-duration: 150ms;
+  transition-delay: 150ms;
+  transition-timing-function: ease-out;
+  opacity: 1;
+}
+
+.balao-hover-out {
+  position: fixed;
+  position-area: bottom;
+  position-try-fallbacks: top;
+
+  opacity: 0;
+  max-width: 50vw;
+  max-height: 50vh;
+  width: max-content;
+  overflow: auto;
+  white-space: break-spaces;
+  z-index: 2250;
+  transition-property: display, opacity;
+  transition-duration: 150ms;
+  transition-delay: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.balao-hover-out.exibe {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "Elemento": ["./depende/Elemento.js"],
+      "jquery": ["./depende/JQuery-empacotado.js"],
+      "papaparse": ["./depende/papaparse-esm.js"]
+    }
+  }
+}

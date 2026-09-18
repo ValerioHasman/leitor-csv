@@ -1,11 +1,7 @@
-[popover]:where(:not(:popover-open)) {
-  display: none !important;
-}
-
 .popover-on {
 
   transition-property: opacity, transform, display, scale;
-  transition-duration: 0s;
+  transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transition-behavior: allow-discrete;
   inset: unset;
@@ -33,11 +29,11 @@
   max-width: -moz-available;
   position: fixed;
   position-try-order: most-height;
-  position-area: bottom;
+  position-area: span-left bottom;
   position-try-fallbacks:
-    span-left bottom,
     span-right bottom,
-    top,
+    bottom,
     span-right top,
-    span-left top;
+    span-left top,
+    top;
 }

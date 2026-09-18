@@ -9,12 +9,13 @@ import "datatables.net-colreorder";
 import "datatables.net-colreorder-bs5";
 DataTable.ext.errMode = 'throw';
 import TabelaRedimencionavel from "../depende/TabelaRedimencionavel/TabelaRedimencionavel.js";
-import Elemento from "Elemento";
+import Elemento, { Controle } from "Elemento";
 import { aplicarAncoraPopOver } from "../componentes/PopOver.js";
 import { CongeladorDeColunas } from "../depende/CongeladorDeColunas/CongeladorDeColunas.js";
 import { botaoCSV } from "./LerCsv.js";
 import { main, spinner } from "../scripts/main.js";
-import Tooltip from "./Tooltip.js";
+import Tooltip, { ancoraBalaoCloneSpan } from "./Tooltip.js";
+import { unirInputLabel } from "./unirInputLabel.js";
 
 DataTable.ColumnControl.content.buscaEntidade = {
   defaults: { placeholder: '' },
@@ -155,12 +156,7 @@ function replaceClass(el, clss, ...nclss) {
 
 function renderEntidade(data, type, row) {
   if (type === 'display') {
-    const spanF = Elemento.span({}, data)
-    const span = Elemento.span({ className: "controle-celula small" },
-      spanF
-    );
-    if (data) Tooltip(spanF, data);
-    return span;
+    return ancoraBalaoCloneSpan(Elemento.span({ className: "controle-celula small" }, data));
   }
   return data || "";
 }
@@ -217,6 +213,17 @@ export function DataTableCsv(dados) {
     Elemento.tbody()
   );
 
+  const ths = tabelaNode.querySelectorAll('thead th[data-name]');
+
+  for (const th of ths) {
+    th.addEventListener('mousedown', function (e) {
+      if (e.button !== 1) return;
+      e.preventDefault();
+      tabelaDataTable.column(th).visible(false);
+      tabelaDataTable.state.save();
+    });
+  }
+
   const tabelaRedmenci = new TabelaRedimencionavel(
     tabelaNode,
     { seletor: "th" }
@@ -272,10 +279,6 @@ export function DataTableCsv(dados) {
         container.querySelector("&>div").append(
           Elemento.div(
             { className: "justify-content-between align-items-center col-auto d-flex gap-1" },
-            Elemento.div(
-              { className: "form-check form-switch" },
-              Elemento.input({ className: "form-check-input line-clamp-1-box", type: "checkbox", checked: true })
-            ),
             botaoCSV(
               async (dados) => {
                 congelador.destroy();
@@ -316,7 +319,8 @@ export function DataTableCsv(dados) {
                   ),
                 )
               )
-            )
+            ),
+            listaVisibilidade()
           )
         );
 
@@ -368,6 +372,7 @@ export function DataTableCsv(dados) {
         ...colunas.map(
           (coluna) => {
             return {
+              name: coluna,
               data: coluna,
               render: renderEntidade
             }
@@ -519,7 +524,7 @@ export function DataTableCsv(dados) {
         {
           targets: '*',
           columnControl: [
-            { target: 0, content: ['ocultarColuna', 'order'] },
+            { target: 0, content: ['order'] },
             { target: 1, content: ['search'] }
           ]
         },
@@ -532,6 +537,57 @@ export function DataTableCsv(dados) {
       pageLength: 50
     }
   );
+
+  function listaVisibilidade() {
+
+    const ul = Elemento.ul({ className: "list-group gap-1" });
+
+    const popOver = Elemento.div({}, ul);
+
+    popOver.addEventListener(
+      "toggle",
+      (ev) => {
+        if (ev.newState === "open") {
+          ul.replaceChildren(
+            ...colunas.map(
+              col => {
+                const ths = tabelaDataTable.columns().header().toArray();
+                const idx = ths.findIndex(th => th.dataset.name === col);
+                const api = tabelaDataTable.column(idx);
+                const visible = tabelaDataTable.column(idx).visible();
+
+                return Elemento.li({ className: "list-group-item list-group-item-action border-0 rounded-3 py-0 px-1" },
+                  Elemento.div(
+                    { className: "form-check form-switch mb-0" },
+                    ...unirInputLabel(
+                      Elemento.input({
+                        className: "form-check-input",
+                        type: "checkbox",
+                        role: "switch",
+                        checked: Boolean(visible),
+                        onchange: (e) => {
+                          api.visible(e.currentTarget.checked);
+                        }
+                      }),
+                      Elemento.label({ className: "form-check-label stretched-link" }, col)
+                    )
+                  )
+                )
+              }
+            )
+          );
+        }
+      }
+    )
+
+    return aplicarAncoraPopOver(
+      Elemento.button(
+        { className: "btn btn-sm btn-primary" },
+        Elemento.i({ className: "bi bi-eye" })
+      ),
+      popOver
+    );
+  }
 
   tabelaDataTable.on(
     'draw',

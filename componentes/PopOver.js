@@ -25,13 +25,12 @@ export function aplicarAncoraPopOver(elementoBotao, recipiente) {
   elementoBotao.setAttribute('popovertarget', id);
   elementoBotao.style.setProperty("anchor-name", `--${id}`);
 
-  recipiente.classList.add("popover-on", "ancorado-ao-botao");
+  recipiente.classList.add("popover-on", "ancorado-ao-botao", "rounded-3", "bg-body", "text-body", "border", "shadow-sm");
   recipiente.id = id;
   recipiente.popover = "auto";
   recipiente.style.setProperty("position-anchor", `--${id}`);
 
   recipiente.addEventListener('toggle', function (e) {
-    console.log(e.newState)
     if (e.newState === 'open') {
       window.dispatchEvent(
         new Event('resize')
