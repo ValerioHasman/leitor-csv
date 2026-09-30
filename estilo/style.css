@@ -186,3 +186,38 @@ thead>tr:last-child td {
   --bs-tooltip-max-width: 512;
   --bs-tooltip-padding-y: 0.5rem;
 }
+
+.dtsb-searchBuilder {
+  .dtsb-criteria {
+    gap: 0.25rem;
+    background-color: rgb(var(--bs-tertiary-bg-rgb));
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .dtsb-vertical {
+    margin-bottom: 0.5rem !important;
+    padding-block: 0.5rem !important;
+
+    .dtsb-buttonContainer {
+      margin-right: auto;
+    }
+  }
+
+  .dtsb-buttonContainer {
+    display: flex !important;
+    margin-right: 0;
+    gap: 0.25rem;
+  }
+
+  div.dtsb-group div.dtsb-buttonContainer>button.btn.btn-secondary.dtsb-right.dtsb-button,
+  div.dtsb-group div.dtsb-buttonContainer>button.btn.btn-secondary.dtsb-left.dtsb-button {
+    margin: 0;
+  }
+
+  div.dtsb-group div.dtsb-criteria select.dtsb-dropDown,
+  div.dtsb-group div.dtsb-criteria input.dtsb-input {
+    margin: 0;
+  }
+}

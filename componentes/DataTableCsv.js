@@ -9,7 +9,7 @@ import "datatables.net-colreorder";
 import "datatables.net-colreorder-bs5";
 DataTable.ext.errMode = 'throw';
 import TabelaRedimencionavel from "../depende/TabelaRedimencionavel/TabelaRedimencionavel.js";
-import Elemento, { Controle } from "Elemento";
+import Elemento, { Controle, execute } from "Elemento";
 import { aplicarAncoraPopOver } from "../componentes/PopOver.js";
 import { CongeladorDeColunas } from "../depende/CongeladorDeColunas/CongeladorDeColunas.js";
 import { botaoCSV } from "./LerCsv.js";
@@ -326,6 +326,7 @@ export function DataTableCsv(dados) {
                 )
               )
             ),
+            sb(),
             listaVisibilidade()
           )
         );
@@ -544,6 +545,25 @@ export function DataTableCsv(dados) {
       pageLength: 50
     }
   );
+
+  function sb() {
+    return aplicarAncoraPopOver(
+      Elemento.button(
+        {
+          className: "btn btn-primary btn-sm"
+        },
+        Elemento.i({ className: "bi bi-funnel" })
+      ),
+      execute(
+        Elemento.div({ style: { minWidth: "300px" } }),
+        async (div) => {
+          await new Promise(r => setTimeout(r));
+          const painelDeBusca = tabelaDataTable.searchBuilder.container()[0];
+          div.append(painelDeBusca);
+        }
+      )
+    )
+  }
 
   function listaVisibilidade() {
 
