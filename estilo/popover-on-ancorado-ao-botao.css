@@ -21,19 +21,9 @@
 }
 
 .ancorado-ao-botao {
-  min-width: min-content;
-  max-height: -webkit-fill-available;
   max-height: stretch;
   max-width: stretch;
-  max-width: -webkit-fill-available;
-  max-width: -moz-available;
   position: fixed;
-  position-try-order: most-height;
-  position-area: span-left bottom;
-  position-try-fallbacks:
-    span-right bottom,
-    bottom,
-    span-right top,
-    span-left top,
-    top;
+  position-area: bottom;
+  position-try-fallbacks: top;
 }

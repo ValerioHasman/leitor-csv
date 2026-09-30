@@ -1,0 +1,26 @@
+{
+  "name": "Leitor CSV",
+  "short_name": "LC",
+  "start_url": "./",
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "minimal-ui",
+    "fullscreen",
+    "browser"
+  ],
+  "icons": [
+    {
+      "src": "./favicon.png",
+      "sizes": "255x255",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon.png",
+      "sizes": "255x255",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

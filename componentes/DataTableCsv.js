@@ -181,6 +181,8 @@ export function DataTableCsv(dados) {
 
   const colunas = Object.keys(dados.data[0]);
 
+  const limiteInicialColunas = Math.ceil(document.body.clientWidth / 110) + 1;
+
   const tabelaNode = Elemento.table(
     { className: "table align-middle table-sm table-hover" },
     Elemento.thead(
@@ -302,19 +304,19 @@ export function DataTableCsv(dados) {
                 Elemento.div(
                   { className: "list-group gap-1" },
                   Elemento.button(
-                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1", onclick: descongelar },
+                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1 line-clamp-1-box", onclick: descongelar },
                     "Não congelar"
                   ),
                   Elemento.button(
-                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1", onclick: congelarUmaColuna },
+                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1 line-clamp-1-box", onclick: congelarUmaColuna },
                     "Congelar uma coluna"
                   ),
                   Elemento.button(
-                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1", onclick: congelarDuasColunas },
+                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1 line-clamp-1-box", onclick: congelarDuasColunas },
                     "Congelar duas colunas"
                   ),
                   Elemento.button(
-                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1", onclick: congelarTresColunas },
+                    { type: "button", className: "list-group-item list-group-item-action border-0 rounded-3 py-1 line-clamp-1-box", onclick: congelarTresColunas },
                     "Congelar três colunas"
                   ),
                 )
@@ -370,11 +372,12 @@ export function DataTableCsv(dados) {
       },
       columns: [
         ...colunas.map(
-          (coluna) => {
+          (coluna, indice) => {
             return {
               name: coluna,
               data: coluna,
-              render: renderEntidade
+              render: renderEntidade,
+              visible: indice < limiteInicialColunas
             }
           }
         )
@@ -569,7 +572,7 @@ export function DataTableCsv(dados) {
                           api.visible(e.currentTarget.checked);
                         }
                       }),
-                      Elemento.label({ className: "form-check-label stretched-link" }, col)
+                      Elemento.label({ className: "form-check-label stretched-link line-clamp-1-box" }, col)
                     )
                   )
                 )

@@ -1,6 +1,7 @@
 :root {
   --bs-border-radius: .5rem;
   --bs-border-radius-sm: .5rem;
+  interpolate-size: allow-keywords;
 }
 
 .dtsb-input {
@@ -84,6 +85,7 @@ th {
     padding: 0;
     height: stretch;
     overflow: auto;
+    overscroll-behavior: contain;
   }
 
   div.dt-container .row {
@@ -104,6 +106,26 @@ th {
   }
 
 }
+
+[for^="dt-search"] {
+  anchor-name: --aa
+}
+
+[id^="dt-search"] {
+  transition: all 150ms ease-out;
+  position: fixed;
+  z-index: 11111111;
+  margin-left: 0px !important;
+  position-anchor: --aa;
+  position-area: bottom;
+}
+
+[id^="dt-search"]:not(:focus) {
+  width: 0px !important;
+  padding: 0px;
+  border-width: 0px;
+}
+
 
 table.dtcr-cloned.dataTable {
   z-index: 1021;
