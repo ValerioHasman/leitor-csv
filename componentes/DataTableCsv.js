@@ -256,6 +256,10 @@ export function DataTableCsv(dados) {
 
         const container = thisApi.table().container();
 
+        const inputSearch = container.querySelector('[id^="dt-search"]');
+        inputSearch.accessKey = 'b';
+        inputSearch.placeholder = 'B\u0332uscar';
+
         /** @type {HTMLDivElement[]} */
         const [painel1, painel2, painel3] = container.querySelectorAll("&>*");
 

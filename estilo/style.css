@@ -118,10 +118,13 @@ th {
   margin-left: 0px !important;
   position-anchor: --aa;
   position-area: bottom;
+  field-sizing: content;
+  min-width: 300px;
 }
 
 [id^="dt-search"]:not(:focus) {
   width: 0px !important;
+  min-width: 0px;
   padding: 0px;
   border-width: 0px;
 }
