@@ -16,6 +16,7 @@ import { botaoCSV } from "./LerCsv.js";
 import { main, spinner } from "../scripts/main.js";
 import Tooltip, { ancoraBalaoCloneSpan } from "./Tooltip.js";
 import { unirInputLabel } from "./unirInputLabel.js";
+import { aplicarEstiloBtn } from "./Botoes.js";
 
 DataTable.ColumnControl.content.buscaEntidade = {
   defaults: { placeholder: '' },
@@ -259,6 +260,10 @@ export function DataTableCsv(dados) {
 
         const container = thisApi.table().container();
 
+        aplicarEstiloBtn(
+          container.querySelector('[for^="dt-search"]')
+        );
+
         const inputSearch = container.querySelector('[id^="dt-search"]');
         inputSearch.accessKey = 'b';
         inputSearch.placeholder = 'B\u0332uscar';
@@ -270,8 +275,8 @@ export function DataTableCsv(dados) {
         painel2.style.setProperty("--bs-gutter-x", 0);
         painel3.style.setProperty("--bs-gutter-x", 0);
 
-        painel1.classList.add("bg-body-tertiary");
-        painel3.classList.add("bg-body-tertiary");
+        painel1.classList.add("bg-body-tertiary", "px-2");
+        painel3.classList.add("bg-body-tertiary", "px-2");
 
         painel1.classList.add("gap-1", "p-1");
 
@@ -305,9 +310,11 @@ export function DataTableCsv(dados) {
               }
             ),
             aplicarAncoraPopOver(
-              Elemento.button(
-                { className: "btn btn-primary btn-sm" },
-                Elemento.i({ className: "bi bi-snow" })
+              aplicarEstiloBtn(
+                Elemento.button(
+                  {},
+                  Elemento.i({ className: "bi bi-snow" })
+                )
               ),
               Elemento.div(
                 { className: "bg-body p-1 border border-secondary border-opacity-10 rounded-3 shadow" },
@@ -466,7 +473,7 @@ export function DataTableCsv(dados) {
         infoEmpty: "",
         infoFiltered: "",
         infoPostFix: "",
-        search: `<i class="bi me-2 bi-search"></i>`,
+        search: `<i class="bi bi-search"></i>`,
         url: "",
         paginate: {
           first: `<i class="bi bi-chevron-double-left"></i>`,
@@ -556,11 +563,11 @@ export function DataTableCsv(dados) {
 
   function sb() {
     return aplicarAncoraPopOver(
-      Elemento.button(
-        {
-          className: "btn btn-primary btn-sm"
-        },
-        Elemento.i({ className: "bi bi-funnel" })
+      aplicarEstiloBtn(
+        Elemento.button(
+          {},
+          Elemento.i({ className: "bi bi-funnel" })
+        )
       ),
       execute(
         Elemento.div({ style: { minWidth: "300px" } }),
@@ -625,9 +632,11 @@ export function DataTableCsv(dados) {
     )
 
     return aplicarAncoraPopOver(
-      Elemento.button(
-        { className: "btn btn-sm btn-primary" },
-        Elemento.i({ className: "bi bi-eye" })
+      aplicarEstiloBtn(
+        Elemento.button(
+          {},
+          Elemento.i({ className: "bi bi-eye" })
+        )
       ),
       popOver
     );
@@ -656,3 +665,4 @@ export function DataTableCsv(dados) {
 
   return tabelaDataTable;
 }
+
