@@ -1,5 +1,5 @@
 import papaparse from "papaparse";
-import Elemento, { execute } from "Elemento";
+import Elemento, { Controle, execute } from "Elemento";
 import Dialog from "./Dialog.js";
 import { unirLabelInput } from "./unirInputLabel.js";
 
@@ -13,6 +13,14 @@ export function inputFile() {
   return input;
 }
 
+const opcoes = [
+  new Option("", ""),
+  new Option("Ponto e Vírgula", ";"),
+  new Option("Vírgula", ","),
+  new Option("Tabulação", "\u0009"),
+  new Option("Barra vertical", "|"),
+];
+
 export function botaoCSV(funcao) {
   return Elemento.button(
     {
@@ -20,6 +28,8 @@ export function botaoCSV(funcao) {
       type: "button",
       onclick: () => {
         const pre = document.createTextNode("");
+        const valor = new Controle((v) => opcoes.find(o => o.value == v)?.value || opcoes[0].value, "");
+        let parseado = null;
 
         const modal = Dialog.simples(
           Elemento.form(
@@ -29,24 +39,8 @@ export function botaoCSV(funcao) {
                 modal.close();
                 const form = ev.target;
                 const separador = form.querySelector('[name="separador"]');
-                const csvContent = form.querySelector('[name="csvContent"]');
 
-                const file = csvContent.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                  const conteudo = e.target.result;
-                  const dados = papaparse.parse(conteudo, {
-                    header: true,
-                    delimiter: separador.value,
-                    quoteChar: '"',
-                    escapeChar: '"',
-                    skipEmptyLines: true
-                  });
-                  funcao(dados);
-                };
-                reader.readAsText(file);
+                funcao(parseado);
               }
             },
             Elemento.div(
@@ -80,7 +74,11 @@ export function botaoCSV(funcao) {
                         reader.onload = (e) => {
                           const conteudo = e.target.result;
 
-                          pre.data = conteudo;
+                          pre.data = conteudo.substring(0, 4000) + "\u000A\u2026";
+
+                          parseado = carregarCsvParseado(conteudo);
+
+                          valor.valor = parseado.meta.delimiter
                         };
                         reader.readAsText(file);
                       }
@@ -91,11 +89,8 @@ export function botaoCSV(funcao) {
               Elemento.div({ className: "col-auto" },
                 ...unirLabelInput(
                   Elemento.label({ className: "form-label" }, "Separador"),
-                  Elemento.select({ className: "form-select form-select-sm", name: "separador", required: true },
-                    new Option(""),
-                    new Option("Ponto e Vírgula", ";"),
-                    new Option("Vírgula", ","),
-                    new Option("Tabulação", "\u0009"),
+                  Elemento.select({ className: "form-select form-select-sm", name: "separador", required: true, value: valor },
+                    ...opcoes
                   )
                 )
               ),
@@ -122,7 +117,18 @@ export function botaoCSV(funcao) {
         );
       }
     },
-    "Carregar arquivo",
-    Elemento.i({ className: "ms-2 bi bi-filetype-csv" })
+    Elemento.i({ className: "bi bi-filetype-csv" })
   )
+}
+
+function carregarCsvParseado(conteudo) {
+
+  const dados = papaparse.parse(conteudo, {
+    header: true,
+    quoteChar: '"',
+    escapeChar: '"',
+    skipEmptyLines: true
+  });
+
+  return dados;
 }

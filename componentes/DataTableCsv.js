@@ -156,6 +156,9 @@ function replaceClass(el, clss, ...nclss) {
 
 function renderEntidade(data, type, row) {
   if (type === 'display') {
+    if (!data) {
+      return Elemento.span({ className: "user-select-none controle-celula small line-clamp-1-box" }, "\u00A0");
+    }
     return ancoraBalaoCloneSpan(Elemento.span({ className: "controle-celula small" }, data));
   }
   return data || "";
@@ -266,6 +269,9 @@ export function DataTableCsv(dados) {
         painel1.style.setProperty("--bs-gutter-x", 0);
         painel2.style.setProperty("--bs-gutter-x", 0);
         painel3.style.setProperty("--bs-gutter-x", 0);
+
+        painel1.classList.add("bg-body-tertiary");
+        painel3.classList.add("bg-body-tertiary");
 
         painel1.classList.add("gap-1", "p-1");
 
@@ -388,6 +394,8 @@ export function DataTableCsv(dados) {
         )
       ],
       language: {
+        thousands: ".",
+        decimal: ",",
         searchBuilder: {
           data: "Coluna",
           condition: "Condição",
@@ -454,7 +462,7 @@ export function DataTableCsv(dados) {
         lengthMenu: `_MENU_ <i class="bi ms-2 bi-table"></i>`,
         lengthLabels: { '-1': 'Todos' },
         zeroRecords: "Nenhum resultado encontrado",
-        info: "",
+        info: '<small class="ms-2 text-muted fst-italic">De _START_ até _END_ | _TOTAL_ / _MAX_</small>',
         infoEmpty: "",
         infoFiltered: "",
         infoPostFix: "",
@@ -575,33 +583,42 @@ export function DataTableCsv(dados) {
       "toggle",
       (ev) => {
         if (ev.newState === "open") {
-          ul.replaceChildren(
-            ...colunas.map(
-              col => {
-                const ths = tabelaDataTable.columns().header().toArray();
-                const idx = ths.findIndex(th => th.dataset.name === col);
-                const api = tabelaDataTable.column(idx);
-                const visible = tabelaDataTable.column(idx).visible();
+          const ths = tabelaDataTable.columns().header().toArray();
+          const colunasComVisibilidade = colunas.map(col => {
+            const idx = ths.findIndex(th => th.dataset.name === col);
+            return { col, idx, visible: tabelaDataTable.column(idx).visible() };
+          });
 
-                return Elemento.li({ className: "list-group-item list-group-item-action border-0 rounded-3 py-0 px-1" },
-                  Elemento.div(
-                    { className: "form-check form-switch mb-0" },
-                    ...unirInputLabel(
-                      Elemento.input({
-                        className: "form-check-input",
-                        type: "checkbox",
-                        role: "switch",
-                        checked: Boolean(visible),
-                        onchange: (e) => {
-                          api.visible(e.currentTarget.checked);
-                        }
-                      }),
-                      Elemento.label({ className: "form-check-label stretched-link line-clamp-1-box" }, col)
+          colunasComVisibilidade.sort((a, b) => {
+            if (a.visible !== b.visible) return a.visible ? 1 : -1;
+            return a.col.localeCompare(b.col, "pt-BR", { sensitivity: 'base' });
+          });
+
+          ul.replaceChildren(
+            ...colunasComVisibilidade
+              .map(
+                ({ col, idx, visible }) => {
+                  const api = tabelaDataTable.column(idx);
+
+                  return Elemento.li({ className: "list-group-item list-group-item-action border-0 rounded-3 py-0 px-1" },
+                    Elemento.div(
+                      { className: "form-check form-switch mb-0" },
+                      ...unirInputLabel(
+                        Elemento.input({
+                          className: "form-check-input",
+                          type: "checkbox",
+                          role: "switch",
+                          checked: Boolean(visible),
+                          onchange: (e) => {
+                            api.visible(e.currentTarget.checked);
+                          }
+                        }),
+                        Elemento.label({ className: "form-check-label stretched-link line-clamp-1-box" }, col)
+                      )
                     )
                   )
-                )
-              }
-            )
+                }
+              )
           );
         }
       }
