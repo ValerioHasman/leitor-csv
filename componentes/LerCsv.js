@@ -113,6 +113,7 @@ export function botaoCSV(funcao) {
               )
             )
           );
+          modal.style.maxWidth = "512px";
         }
       },
       Elemento.i({ className: "bi bi-filetype-csv" })
